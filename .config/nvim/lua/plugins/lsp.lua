@@ -43,7 +43,7 @@ return {
           map('<leader>vrn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>vca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
           map('<leader>vd', vim.diagnostic.open_float, '')
-          map("K", vim.lsp.buf.hover, "")
+          --map("K", vim.lsp.buf.hover, "")
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         end,
       })
