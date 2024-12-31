@@ -223,3 +223,7 @@ exec --no-startup-id export MOZ_USE_XINPUT2=1
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 
+exec --no-startup-id xset r rate 250 80
+exec --no-startup-id setxkbmap -option ctrl:nocaps
+exec --no-startup-id volumeicon
+

@@ -1,4 +1,2 @@
-print('test')
-
-vim.g.mapleader = " " 
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+require("settings")
+require("config.lazy")

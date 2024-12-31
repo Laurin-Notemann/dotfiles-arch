@@ -1,0 +1,10 @@
+--hidden
+
+--files
+
+--glob=!**/.git/**
+--glob=!**/node_modules/**
+--glob=!**/.next/**
+--glob=!**/.cache/**
+--glob=!**/.vscode/**
+--glob=!**/.idea/**
