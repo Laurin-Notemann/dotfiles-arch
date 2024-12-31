@@ -1,0 +1,81 @@
+autoload -Uz vcs_info
+
+function precmd() {
+    vcs_info
+    # Cache git status for both functions
+    if git rev-parse --is-inside-work-tree &>/dev/null; then
+        GIT_STATUS="$(git status --porcelain --untracked-files 2>/dev/null)"
+    else
+        unset GIT_STATUS
+    fi
+}
+
+
+zstyle ':vcs_info:git:*' formats '%b'  # Just show branch name
+
+git_prompt_info() {
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+        return
+    fi
+
+    local branch_name="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" || return
+    
+    # Handle detached HEAD state
+    if [[ "$branch_name" == "HEAD" ]]; then
+        branch_name="$(git rev-parse --short HEAD 2>/dev/null)"
+        branch_name="(detached:${branch_name})"
+    fi
+
+    if [[ -n "$GIT_STATUS" ]]; then
+        echo -n "%F{#D1246A}(${branch_name})"
+    else
+        echo -n "%F{#24D18B}(${branch_name})"
+    fi
+}
+
+git_show_staged() {
+  if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+    return
+  fi
+
+  local git_status="$(git status --porcelain --untracked-files)"
+  local staged_files=0 unstaged_files=0 total_unstaged_files=0 unpushed_commits=0
+
+  while IFS= read -r line; do
+    if [[ $line =~ ^[AMDR] ]]; then
+      ((staged_files++))
+    fi
+    if [[ $line =~ ^\.[MD] ]] || [[ $line =~ '^\?\?' ]]; then
+      ((total_unstaged_files++))
+    fi
+    if [[ $line =~ ^UU ]]; then
+      ((staged_files--))  # Undo count increment for unmerged files, treated as unstaged
+      ((total_unstaged_files++))
+    fi
+  done <<< "$GIT_STATUS"
+
+  unstaged_files=$((total_unstaged_files))  # Includes untracked files
+
+  if git rev-parse --verify HEAD &> /dev/null; then
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)
+    local upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    if [[ -n $upstream ]]; then
+      unpushed_commits=$(git rev-list --count $upstream..HEAD)
+    fi
+  else
+    unpushed_commits=0
+  fi
+
+  local output=""
+
+  if [[ -n $GIT_STATUS || $unpushed_commits -gt 0 ]]; then
+    if [[ $staged_files -gt 0 || $unstaged_files -gt 0 || $unpushed_commits -gt 0 ]]; then
+      output="%B%F{#C6C8CF}${unstaged_files}/${staged_files}/${unpushed_commits} "
+    fi
+  fi
+
+  echo -n "$output"
+}
+
+setopt prompt_subst
+PS1='%B%F{white}%1~ $(git_prompt_info) $(git_show_staged)%f%b'
