@@ -43,7 +43,14 @@ return {
           map('<leader>vrn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>vca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
           map('<leader>vd', vim.diagnostic.open_float, '')
-          --map("K", vim.lsp.buf.hover, "")
+          map("K", function()
+            local config = {
+              border = "rounded",
+              max_height = 12,
+              max_width = 55,
+            }
+            return vim.lsp.buf.hover(config)
+          end, "")
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         end,
       })
@@ -74,15 +81,13 @@ return {
 
       require("mason-lspconfig").setup {
         handlers = {
-          function (server_name)
-             local server = servers[server_name] or {}
-              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-              require('lspconfig')[server_name].setup(server)
+          function(server_name)
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            require('lspconfig')[server_name].setup(server)
           end
         }
       }
-
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
     end
   },
 }

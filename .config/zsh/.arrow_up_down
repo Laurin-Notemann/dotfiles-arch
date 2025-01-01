@@ -2,5 +2,11 @@ autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
+
+# Arch (Move up or down based on OS)
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
+
+# Ubunut
+bindkey '^[OA' up-line-or-beginning-search   
+bindkey '^[OB' down-line-or-beginning-searc

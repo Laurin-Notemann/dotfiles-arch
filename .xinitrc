@@ -4,4 +4,6 @@ xrandr --output eDP-1 --scale 1.25x1.23
 
 export QT_QPA_PLATFORMTHEME=qt5ct
 
+setxkbmap us
+
 exec i3

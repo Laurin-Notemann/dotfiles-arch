@@ -27,9 +27,9 @@ git_prompt_info() {
     fi
 
     if [[ -n "$GIT_STATUS" ]]; then
-        echo -n "%F{#D1246A}(${branch_name})"
+        echo -n "%F{#D1246A}(${branch_name}) "
     else
-        echo -n "%F{#24D18B}(${branch_name})"
+          echo -n "%F{#24D18B}(${branch_name}) "
     fi
 }
 
@@ -78,4 +78,4 @@ git_show_staged() {
 }
 
 setopt prompt_subst
-PS1='%B%F{white}%1~ $(git_prompt_info) $(git_show_staged)%f%b'
+PS1='%B%F{white}%1~ $(git_prompt_info)$(git_show_staged)%f%b'

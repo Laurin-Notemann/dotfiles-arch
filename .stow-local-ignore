@@ -1,5 +1,4 @@
 .git
-scripts
 
 # Comments and blank lines are allowed.
 
@@ -24,3 +23,5 @@ _darcs
 ^/COPYING
 
 packages
+^\.zsh_history$
+\.zcompdump
